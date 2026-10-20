@@ -1,0 +1,53 @@
+# Site settings, owned by the site admin. Requests can't change them.
+# Restart the container after editing.
+
+llm:
+  model: claude-sonnet-5-5
+  effort: medium
+
+# Datasets the agent can search (adapters in src/triage/datasets.py).
+datasets: [mp, aflow]
+
+openalex:
+  base_url: "https://api.openalex.org"
+  papers_per_search: 8  # more papers per formula make results less sensitive to small ranking changes
+
+# Literature is searched automatically for the top candidates. Submitting fails unless the top
+# literature_top_n complete candidates have a search on record; twice as many are searched.
+literature_top_n: 5
+
+# Known biases of dataset fields, as "dataset.field". Each note is shown to the agent and linked
+# (source) in the criteria table. A bias shifts filter bounds and ranking targets on that field in
+# its direction, unless the agent marks a filter strict:
+#   bias: low,  factor: 1.6   computed values run low by that factor, so "≥ 4" becomes "≥ 2.5"
+#   bias: high, offset: 0.05  computed values run high by that amount, so "≤ 0" becomes "≤ 0.05"
+field_notes:
+  mp.band_gap:
+    note: "GGA/GGA+U band gaps. In Materials Project's test of 237 compounds they were low by an average factor of 1.6, with a 0.6 eV mean error left after that correction; the error varies by material."
+    bias: low
+    factor: 1.6
+    source: https://docs.materialsproject.org/methodology/materials-methodology/electronic-structure
+  aflow.Egap:
+    note: "PBE band gaps, which share the GGA underestimate (Materials Project found an average factor of 1.6 on 237 compounds); the error varies by material."
+    bias: low
+    factor: 1.6
+    source: https://docs.materialsproject.org/methodology/materials-methodology/electronic-structure
+  mp.energy_above_hull:
+    note: "Many synthesized compounds sit a little above the computed convex hull (metastable), so a small tolerance keeps makeable phases."
+    bias: high
+    offset: 0.05
+    source: https://doi.org/10.1126/sciadv.1600225
+
+# Words that describe a material's form, never its use. They can't qualify a paper on their own: a paper
+# supports a material only if one sentence names it and contains an application phrase with at least one
+# word not on this list ("gate dielectric", "solar cell"; not "thin film"). Same for every domain.
+generic_terms: [thin film, film, layer, device, cell, coating, sample]
+
+# Elements excluded from every search, grouped by the reason shown on the page. Requests can't change this.
+always_exclude:
+  radioactive: [Tc, Pm, Po, At, Rn, Fr, Ra, Ac, Th, Pa, U, Np, Pu, Am, Cm, Bk, Cf, Es, Fm, Md, "No", Lr]  # "No" is quoted: YAML would read it as false
+
+# Most tool calls the agent may make per request.
+max_steps: 15
+
+audit_log: logs/audit.jsonl

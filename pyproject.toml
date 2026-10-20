@@ -1,0 +1,35 @@
+[project]
+name = "materials-triage"
+version = "0.1.0"
+description = "Evidence-first triage assistant for candidate materials, built on public data."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "anthropic>=0.70",
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "httpx2>=2.0",
+  "pydantic>=2.8",
+  "pyyaml>=6.0",
+  "duckdb>=1.1",
+  "python-dotenv>=1.0",
+  "typer>=0.12",
+  "rich>=13",
+]
+
+[project.optional-dependencies]
+dev = ["ruff>=0.6"]
+
+[project.scripts]
+triage = "triage.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/triage"]
+
+
+[tool.ruff]
+line-length = 100

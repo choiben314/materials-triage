@@ -1,0 +1,12 @@
+# Scientist defaults. Restart the container after editing.
+
+# How many ranked materials a search returns (named materials are always included).
+top_n: 10
+
+summary_max_sentences: 6
+view: summary
+
+examples:
+  - "Find stable oxide photocatalysts for water splitting with a band gap of 1.8-2.8 eV."
+  - "Compare TiO2, BiVO4, WO3 and Fe2O3 as photoanodes."
+  - "Transparent conducting oxides: band gap above 3 eV, stable, no indium."

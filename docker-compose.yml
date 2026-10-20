@@ -1,0 +1,15 @@
+services:
+  triage:
+    build: .
+    image: materials-triage
+    ports:
+      - "8000:8000"
+    env_file: .env
+    volumes:
+      - ./config:/app/config:ro   # policy.yaml (site admin) and user.yaml (scientist defaults)
+      - ./logs:/app/logs          # audit log and stored results
+      - data:/app/data            # downloaded datasets
+    restart: unless-stopped
+
+volumes:
+  data:

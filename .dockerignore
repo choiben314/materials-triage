@@ -1,0 +1,10 @@
+.venv
+.env
+**/node_modules
+frontend/dist
+data/cache
+data/snapshots/*.parquet
+logs
+.git
+**/__pycache__
+.pytest_cache
